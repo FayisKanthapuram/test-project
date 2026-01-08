@@ -25,6 +25,7 @@ const razorpay = new Razorpay({
 
 app.get("/", (req, res) => {
   res.render("index", { key: process.env.RAZORPAY_KEY_ID });
+  // res.json({status:200,message:'hello world'})
 });
 
 // Create order
