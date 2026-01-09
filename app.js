@@ -54,7 +54,7 @@ app.post("/verify-payment", (req, res) => {
     .digest("hex");
 
   if (expectedSignature === razorpay_signature) {
-    res.send("Payment Verified ✔");
+    res.send("Thnak you");
   } else {
     res.send("Payment Verification Failed ❌");
   }
