@@ -1,13 +1,20 @@
-FROM node:18
+# 1. Small & fast Node image
+FROM node:20-alpine
 
+# 2. Inside-container working folder
 WORKDIR /app
 
+# 3. Copy dependency files first (for caching)
 COPY package*.json ./
 
-RUN npm install
+# 4. Install dependencies (CI best practice)
+RUN npm ci
 
+# 5. Copy rest of the source code
 COPY . .
 
+# 6. App port
 EXPOSE 3000
 
-CMD ["npm", "start"]
+# 7. Start app (NO nodemon in prod)
+CMD ["node", "app.js"]
