@@ -1,0 +1,26 @@
+name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Pull Docker image
+        run: docker pull ${{ secrets.DOCKER_USERNAME }}/test-project:latest
+
+      - name: Remove old container
+        run: docker rm -f test-project || true
+
+      - name: Run Docker container
+        run: |
+          docker run -d -p 3000:3000 \
+            --name test-project \
+            -e RAZORPAY_KEY_ID=${{ secrets.RAZORPAY_KEY_ID }} \
+            -e RAZORPAY_KEY_SECRET=${{ secrets.RAZORPAY_KEY_SECRET }} \
+            ${{ secrets.DOCKER_USERNAME }}/test-project:latest
